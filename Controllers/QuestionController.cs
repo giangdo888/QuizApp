@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using QuizApp.DTOs;
 using QuizApp.Helper;
 using QuizApp.Interfaces;
@@ -12,9 +13,11 @@ namespace QuizApp.Controllers
     public class QuestionController : ControllerBase
     {
         public readonly IQuestion _questionService;
-        public QuestionController(IQuestion questionService)
+        public readonly IMapper _mapper;
+        public QuestionController(IQuestion questionService, IMapper mapper)
         {
             _questionService = questionService;
+            _mapper = mapper;
         }
 
         [HttpGet("{id}")]
@@ -34,7 +37,7 @@ namespace QuizApp.Controllers
         [ProducesResponseType(200)]
         public IActionResult CreateQuestionController(QuestionDTO questionDTO)
         {
-            var question = QuizAppHelper.ToQuestions(questionDTO);
+            var question = _mapper.Map<Questions>(questionDTO);
             return Ok(_questionService.CreateQuestion(question));
         }
 
@@ -44,7 +47,11 @@ namespace QuizApp.Controllers
         public IActionResult UpdateQuestionController(int id, QuestionDTO questionDTO)
         {
             questionDTO.Id = id;
-            var question = QuizAppHelper.ToQuestions(questionDTO);
+            var question = _mapper.Map<Questions>(questionDTO);
+            foreach(var answer in question.Answers)
+            {
+                answer.QuestionsId = question.Id;
+            }
 
             var resultQuestion = _questionService.UpdateQuestion(question);
             if (resultQuestion == null)

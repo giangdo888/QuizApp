@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using QuizApp.AppDbContext;
 using QuizApp.DTOs;
 using QuizApp.Helper;
@@ -10,9 +11,11 @@ namespace QuizApp.Services
     public class QuestionService : IQuestion
     {
         public readonly QuizAppDbContext _context;
-        public QuestionService(QuizAppDbContext context)
+        public readonly IMapper _mapper;
+        public QuestionService(QuizAppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public QuestionDTO CreateQuestion(Questions question)
@@ -38,31 +41,9 @@ namespace QuizApp.Services
             var answers = _context.Answers.Where(a => a.QuestionsId == id).ToList();
             question.Answers = answers;
 
-            var QuestionDTO = QuizAppHelper.ToQuestionDTO(question);
+            var QuestionDTO = _mapper.Map<QuestionDTO>(question);
 
             return QuestionDTO;
-        }
-
-        public List<QuestionDTO> GetQuestionsByQuizId(int quizId)
-        {
-            var quiz = _context.Quizzes.FirstOrDefault(q => q.Id == quizId);
-            if (quiz == null) 
-            { 
-                return null;
-            }
-
-            var quizQuestions = _context.Questions.Where(q => q.Quizzes.Any(quiz => quiz.Id == quizId)).ToList();
-
-            var quizQuestionsDTO = new List<QuestionDTO>();
-            foreach (var question in quizQuestions)
-            {
-                var answers = question.Answers.ToList();
-                var questionDTO = QuizAppHelper.ToQuestionDTO(question);
-
-                quizQuestionsDTO.Add(questionDTO);
-            }
-
-            return quizQuestionsDTO;
         }
 
         public QuestionDTO? UpdateQuestion(Questions question)
