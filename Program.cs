@@ -21,6 +21,7 @@ namespace QuizApp
             builder.Services.AddDbContext<QuizAppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddTransient<IQuestion, QuestionService>();
+            builder.Services.AddTransient<IQuiz, QuizService>();
 
             var app = builder.Build();
 

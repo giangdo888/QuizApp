@@ -18,20 +18,7 @@ namespace QuizApp.Services
             _mapper = mapper;
         }
 
-        public QuestionDTO CreateQuestion(Questions question)
-        {
-            foreach (var answer in question.Answers)
-            {
-                _context.Answers.Add(answer);
-            }
-
-            var newQuestion = _context.Questions.Add(question);
-            _context.SaveChanges();
-
-            return GetQuestionById(newQuestion.Entity.Id);
-        }
-
-        public QuestionDTO GetQuestionById(int id)
+        public QuestionDTO? GetQuestionById(int id)
         {
             var question = _context.Questions.FirstOrDefault(q => q.Id == id);
             if (question == null) {
@@ -44,6 +31,19 @@ namespace QuizApp.Services
             var QuestionDTO = _mapper.Map<QuestionDTO>(question);
 
             return QuestionDTO;
+        }
+
+        public QuestionDTO? CreateQuestion(Questions question)
+        {
+            foreach (var answer in question.Answers)
+            {
+                _context.Answers.Add(answer);
+            }
+
+            var newQuestion = _context.Questions.Add(question);
+            _context.SaveChanges();
+
+            return GetQuestionById(newQuestion.Entity.Id);
         }
 
         public QuestionDTO? UpdateQuestion(Questions question)

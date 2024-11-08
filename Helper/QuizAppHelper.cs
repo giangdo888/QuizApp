@@ -8,6 +8,7 @@ namespace QuizApp.Helper
     {
         public AutoMappingProfille()
         {
+            //default all data group
             CreateMap<AnswerDTO, Answers>();
             CreateMap<Answers, AnswerDTO>();
             CreateMap<QuestionDTO, Questions>();
@@ -15,6 +16,19 @@ namespace QuizApp.Helper
             CreateMap<QuizDTO, Quizzes>();
             CreateMap<Quizzes, QuizDTO>();
 
+            //group to play with no correct answer provided
+            CreateMap<AnswerToPlayDTO, Answers>();
+            CreateMap<Answers, AnswerToPlayDTO>();
+            CreateMap<QuestionToPlayDTO, Questions>();
+            CreateMap<Questions, QuestionToPlayDTO>();
+            CreateMap<QuizToPlayDTO, Quizzes>();
+            CreateMap<Quizzes, QuizToPlayDTO>();
+
+            //group to show answer
+            CreateMap<QuestionAnswersDTO, Questions>();
+            CreateMap<Questions, QuestionAnswersDTO>();
+            CreateMap<QuizAnswersDTO, Quizzes>();
+            CreateMap<Quizzes, QuizAnswersDTO>();
         }
     }
 }
