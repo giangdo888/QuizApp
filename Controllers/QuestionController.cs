@@ -20,6 +20,14 @@ namespace QuizApp.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        [ProducesResponseType(200)]
+        public IActionResult GetAllQuestionsController()
+        {
+            var questions = _questionService.GetAllQuestions();
+            return Ok(questions);
+        }
+
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
