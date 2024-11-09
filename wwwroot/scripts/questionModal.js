@@ -63,8 +63,8 @@ export async function openQuestionModal(mode, id = 0) {
                 body: JSON.stringify(payload)
             });
 
-            fetchQuestions();
         }
+        fetchQuestions();
         closeQuestionModal();
     };
 
