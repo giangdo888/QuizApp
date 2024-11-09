@@ -12,15 +12,46 @@
             <h1 id="home-header">Welcome to the Quiz App</h1>
         </header>
         <main id="main-content">
-            <button onclick="fetchQuizzes()">Start Quiz</button>
-            <button onclick="fetchQuestions()">Open Question Pool</button>
+            <button id="start-quiz-btn">Start Quiz</button>
+            <button id="open-question-pool-btn">Open Question Pool</button>
         </main>
         <div id="home-list-container">
 
         </div>
+        <footer id="home-footer">
+        </footer>
+    </div>
+    <div id="question-modal-overlay" class="modal-overlay, hidden">
+        <div id="question-modal" class="modal">
+            <h3 id="modal-title"></h3>
+            <span>Question Text:</span>
+            <input type="text" id="question-text" />
+
+            <div id="answers-container">
+                <div class="answer">
+                    <input type="text" id="answer-1" placeholder="Answer 1">
+                    <input type="radio" id="correct-1" name="correct-answer">
+                </div>
+                <div class="answer">
+                    <input type="text" id="answer-2" placeholder="Answer 2">
+                    <input type="radio" id="correct-2" name="correct-answer">
+                </div>
+                <div class="answer">
+                    <input type="text" id="answer-3" placeholder="Answer 3">
+                    <input type="radio" id="correct-3" name="correct-answer">
+                </div>
+                <div class="answer">
+                    <input type="text" id="answer-4" placeholder="Answer 4">
+                    <input type="radio" id="correct-4" name="correct-answer">
+                </div>
+            </div>
+            <button id="save-btn">Save</button>
+            <button id="close-btn">Cancel</button>
+        </div>
     </div>
 
     <script src="scripts/config.js"></script>
-    <script src="scripts/app.js"></script>
+    <script type="module" src="scripts/app.js"></script>
+    <script type="module" src="scripts/questionModal.js""></script>
 </body>
 </html>

@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div id="question-modal" class="modal">
+        <h2 id="modal-title"></h2>
+        <label for="question-text">Question Text:</label>
+        <input type="text" id="question-text" />
+
+        <div id="answers-container">
+            <div class="answer">
+                <input type="text" id="answer-1" placeholder="Answer 1">
+                <input type="radio" id="correct-1" name="correct-answer">
+            </div>
+            <div class="answer">
+                <input type="text" id="answer-2" placeholder="Answer 2">
+                <input type="radio" id="correct-2" name="correct-answer">
+            </div>
+            <div class="answer">
+                <input type="text" id="answer-3" placeholder="Answer 3">
+                <input type="radio" id="correct-3" name="correct-answer">
+            </div>
+            <div class="answer">
+                <input type="text" id="answer-4" placeholder="Answer 4">
+                <input type="radio" id="correct-4" name="correct-answer">
+            </div>
+        </div>
+        <button id="save-question">Save</button>
+        <button onclick="closeQuestionModal()">Cancel</button>
+    </div>
+</body>
+</html>
