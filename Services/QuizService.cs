@@ -21,6 +21,12 @@ namespace QuizApp.Services
             _questionService = questionService;
         }
 
+        public List<SimpleQuizDTO> GetAllQuizzes()
+        {
+            var allQuizzes = _context.Quizzes.ToList();
+            return _mapper.Map<List<SimpleQuizDTO>>(allQuizzes);
+        }
+
         public T? GetQuizById<T>(int id) 
         {
             var quiz = _context.Quizzes.FirstOrDefault(q => q.Id == id);

@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="quiz-title">Quiz Title</h1>
+        </header>
+        <main id="quiz-content"></main>
+        <footer>
+            <button id="submit-quiz" onclick="submitQuiz()">Submit Quiz</button>
+        </footer>
+        <div>
+            <button class="hidden" id="home-btn" onclick="window.location.href=`index.html`">Back To Home Page</button>
+        </div>
+        <div class="hidden" id="final-score">
+
+        </div>
+    </div>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/quiz.js"></script>
+</body>
+</html>

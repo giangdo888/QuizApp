@@ -29,6 +29,14 @@ namespace QuizApp.Controllers
             _questionService = questionService;
         }
 
+        [HttpGet]
+        [ProducesResponseType(200)]
+        public IActionResult GetAllQuizzesController()
+        {
+            var allQuizzes = _quizService.GetAllQuizzes();
+            return Ok(allQuizzes);
+        }
+
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]

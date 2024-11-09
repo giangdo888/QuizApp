@@ -36,6 +36,9 @@ namespace QuizApp
 
             app.UseAuthorization();
 
+            app.UseDefaultFiles(); // Looks for default files like index.html in wwwroot
+            app.UseStaticFiles();
+
 
             app.MapControllers();
 

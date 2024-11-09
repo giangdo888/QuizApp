@@ -29,6 +29,10 @@ namespace QuizApp.Helper
             CreateMap<Questions, QuestionAnswersDTO>();
             CreateMap<QuizAnswersDTO, Quizzes>();
             CreateMap<Quizzes, QuizAnswersDTO>();
+
+            //group for simple quiz
+            CreateMap<SimpleQuizDTO, Quizzes>();
+            CreateMap<Quizzes, SimpleQuizDTO>();
         }
     }
 }
