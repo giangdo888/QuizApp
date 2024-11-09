@@ -135,11 +135,62 @@ button.quiz-set-btn:active {
 }
 
 /* Scrollable quiz content */
-#quiz-content {
+#quiz-content, #home-list-container {
     max-height: 70vh; /* Limit the height of the quiz content */
     overflow-y: auto; /* Add vertical scrolling if content exceeds max height */
     padding-right: 10px;
     margin-bottom: 20px;
+}
+
+.question-list-container {
+    padding: 20px;
+}
+
+.question-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.question-item {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.question-btn {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    text-align: left;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.question-btn:hover {
+    background-color: #ff3b3b;
+    transform: scale(1.05);
+}
+
+.question-btn:active {
+    transform: scale(1);
+}
+
+.question-id {
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.question-text {
+    font-size: 1rem;
+    flex-grow: 1;
 }
 
 /* Question styling */

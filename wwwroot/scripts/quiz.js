@@ -2,55 +2,61 @@
 const id = urlParams.get('id');
 
 async function fetchQuizData(quizId) {
-    const response = await fetch(API_BASE_URL + `/quizzes/${id}?type=noanswers`)
-    if (!response.ok) {
-        console.error("Failed to fetch data with given id");
-        return;
-    }
+    try {
+        const response = await fetch(API_BASE_URL + `/quizzes/${id}?type=noanswers`)
+        if (!response.ok) {
+            console.error("Failed to fetch data with given id");
+            return;
+        }
 
-    const quizData = await response.json();
-    displayQuizData(quizData);
+        const quizData = await response.json();
+        displayQuizData(quizData);
+    } catch (error) {
+        console.error("Error fetching quiz data:", error);
+    }
 }
 
 function displayQuizData(quizData) {
-    const quizContainer = document.getElementById("quiz-content");
-    document.getElementById("quiz-title").innerText = quizData.name;
+    try {
+        document.getElementById("quiz-title").innerText = quizData.name;
+        const quizContent = document.getElementById("quiz-content");
+        quizContent.innerHTML = ''; // Clear any existing content
 
-    const quizContent = document.getElementById("quiz-content");
-    quizContent.innerHTML = ''; // Clear any existing content
+        // Loop through each question and add to quiz-content
+        quizData.questions.forEach((question, index) => {
+            const questionElement = document.createElement("div");
+            questionElement.classList.add("question");
 
-    // Loop through each question and add to quiz-content
-    quizData.questions.forEach((question, index) => {
-        const questionElement = document.createElement("div");
-        questionElement.classList.add("question");
+            // Add question text
+            const questionText = document.createElement("h2");
+            questionText.innerText = `${index + 1}. ${question.text}`;
+            questionElement.appendChild(questionText);
 
-        // Add question text
-        const questionText = document.createElement("h2");
-        questionText.innerText = `${index + 1}. ${question.text}`;
-        questionElement.appendChild(questionText);
+            // Add answer buttons
+            question.answers.forEach(answer => {
+                const answerBtn = document.createElement("button");
+                answerBtn.classList.add("answer-btn");
+                answerBtn.innerText = answer.text;
+                answerBtn.setAttribute("data-question-id", question.id);
+                answerBtn.setAttribute("data-answer-id", answer.id);
 
-        // Add answer buttons
-        question.answers.forEach(answer => {
-            const answerBtn = document.createElement("button");
-            answerBtn.classList.add("answer-btn");
-            answerBtn.innerText = answer.text;
-            answerBtn.setAttribute("data-question-id", question.id);
-            answerBtn.setAttribute("data-answer-id", answer.id);
+                // Toggle selected state on click
+                answerBtn.addEventListener("click", () => {
+                    // Clear previous selection for this question
+                    document.querySelectorAll(`[data-question-id="${question.id}"]`).forEach(btn => btn.classList.remove("selected"));
 
-            // Toggle selected state on click
-            answerBtn.addEventListener("click", () => {
-                // Clear previous selection for this question
-                document.querySelectorAll(`[data-question-id="${question.id}"]`).forEach(btn => btn.classList.remove("selected"));
+                    // Mark the clicked answer as selected
+                    answerBtn.classList.add("selected");
+                });
 
-                // Mark the clicked answer as selected
-                answerBtn.classList.add("selected");
+                questionElement.appendChild(answerBtn);
             });
 
-            questionElement.appendChild(answerBtn);
+            quizContent.appendChild(questionElement);
         });
-
-        quizContent.appendChild(questionElement);
-    });
+    } catch (error) {
+        console.error("Error displaying quiz data:", error);
+    }
 }
 
 async function submitQuiz() {
@@ -90,6 +96,9 @@ async function submitQuiz() {
 
     document.getElementById("submit-quiz").classList.add("hidden");
     document.getElementById("home-btn").classList.remove("hidden");
+
+    //scroll back to top
+    document.getElementById("quiz-content").scrollTo({ top: 0, behavior: 'smooth' });
 
     // Show final score
     const finalScore = document.getElementById("final-score");

@@ -18,16 +18,10 @@ namespace QuizApp.Services
             _mapper = mapper;
         }
 
-        public List<QuestionDTO>? GetAllQuestions()
+        public List<SimpleQuestionDTO>? GetAllQuestions()
         {
             var questions = _context.Questions.ToList();
-            foreach(var question in questions)
-            {
-                var answers = _context.Answers.Where(a =>  a.QuestionsId == question.Id).ToList();
-                question.Answers = answers;
-            }
-
-            return _mapper.Map<List<QuestionDTO>>(questions);
+            return _mapper.Map<List<SimpleQuestionDTO>>(questions);
         }
 
         public QuestionDTO? GetQuestionById(int id)

@@ -18,4 +18,10 @@
         public int Id { get; set; }
         public int CorrectAnswerId { get; set; }
     }
+
+    public class SimpleQuestionDTO
+    {
+        public int Id { get; set; }
+        public string Text { get; set; }
+    }
 }

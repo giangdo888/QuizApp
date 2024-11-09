@@ -30,9 +30,11 @@ namespace QuizApp.Helper
             CreateMap<QuizAnswersDTO, Quizzes>();
             CreateMap<Quizzes, QuizAnswersDTO>();
 
-            //group for simple quiz
+            //group for simple
             CreateMap<SimpleQuizDTO, Quizzes>();
             CreateMap<Quizzes, SimpleQuizDTO>();
+            CreateMap<SimpleQuestionDTO, Questions>();
+            CreateMap<Questions, SimpleQuestionDTO>();
         }
     }
 }
