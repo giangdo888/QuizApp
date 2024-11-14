@@ -18,24 +18,24 @@ namespace QuizApp.Controllers
 
         [HttpPost("register")]
 
-        public IActionResult SignUp(UserDTO userDTO)
+        public async Task<ActionResult<UserDTO>> SignUp(UserDTO userDTO)
         {
-            var result = _userService.SignUp(userDTO);
+            var result = await _userService.SignUp(userDTO);
             if (result == null)
             {
-                return NotFound();
+                return BadRequest("Failed to register user");
             }
 
             return Ok(result);
         }
 
         [HttpPost("login")]
-        public IActionResult SignIn(SignInUserDTO signInData)
+        public async Task<ActionResult<string>> SignIn(SignInUserDTO signInData)
         {
-            var token = _userService.SignIn(signInData);
+            var token = await _userService.SignIn(signInData);
             if (token == null)
             {
-                return NotFound();
+                return BadRequest("Invalid credentials");
             }
 
             return Ok(token);
@@ -43,9 +43,14 @@ namespace QuizApp.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult GetAllUsersController()
+        public async Task<ActionResult<List<UserDTO>>> GetAllUsersController()
         {
-            return Ok(_userService.getAllUsers());
+            var userList = await _userService.getAllUsers();
+            if (userList.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(userList);
         }
     }
 }

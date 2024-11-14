@@ -5,10 +5,10 @@ namespace QuizApp.Interfaces
 {
     public interface IQuestion
     {
-        public List<SimpleQuestionDTO>? GetAllQuestions();
-        public QuestionDTO? GetQuestionById(int id);
-        public QuestionDTO? CreateQuestion(QuestionDTO question);
-        public QuestionDTO? UpdateQuestion(int id, QuestionDTO question);
-        public bool DeleteQuestionById(int id);
+        public Task<List<SimpleQuestionDTO>> GetAllQuestions();
+        public Task<QuestionDTO?> GetQuestionById(int id);
+        public Task<QuestionDTO?> CreateQuestion(QuestionDTO question);
+        public Task<QuestionDTO?> UpdateQuestion(int id, QuestionDTO question);
+        public Task<bool> DeleteQuestionById(int id);
     }
 }

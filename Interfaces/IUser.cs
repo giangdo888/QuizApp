@@ -4,10 +4,10 @@ namespace QuizApp.Interfaces
 {
     public interface IUser
     {
-        public UserDTO? SignUp(UserDTO userDTO);
-        public string SignIn(SignInUserDTO signInUserDTO);
-        public UserDTO? getUserByName(string userName);
-        public List<UserDTO> getAllUsers();
+        public Task<UserDTO?> SignUp(UserDTO userDTO);
+        public Task<string> SignIn(SignInUserDTO signInUserDTO);
+        public Task<UserDTO?> GetUserByName(string userName);
+        public Task<List<UserDTO>> getAllUsers();
         //public int? GetMaxScore(int userId);
     }
 }

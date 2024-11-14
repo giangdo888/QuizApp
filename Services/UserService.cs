@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using QuizApp.AppDbContext;
 using QuizApp.DTOs;
 using QuizApp.Helper;
@@ -20,7 +21,7 @@ namespace QuizApp.Services
             _mapper = mapper;
         }
 
-        public UserDTO? SignUp(UserDTO userDTO)
+        public async Task<UserDTO?> SignUp(UserDTO userDTO)
         {
             if (string.IsNullOrEmpty(userDTO.Name) ||  string.IsNullOrEmpty(userDTO.Password))
             {
@@ -30,15 +31,15 @@ namespace QuizApp.Services
             userDTO.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             var newUser = _mapper.Map<Users>(userDTO);
 
-            _context.Users.Add(newUser);
-            _context.SaveChangesAsync();
+            await _context.Users.AddAsync(newUser);
+            await _context.SaveChangesAsync();
 
             return userDTO;
         }
 
-        public string SignIn(SignInUserDTO signInUserDTO)
+        public async Task<string> SignIn(SignInUserDTO signInUserDTO)
         {
-            var userData = getUserByName(signInUserDTO.Name);
+            var userData = await GetUserByName(signInUserDTO.Name);
             if (userData == null || !BCrypt.Net.BCrypt.Verify(signInUserDTO.Password, userData.Password))
             {
                 return string.Empty;
@@ -46,13 +47,13 @@ namespace QuizApp.Services
             return JwtTokenHelper.GenerateJwtToken(userData);
         }
 
-        public UserDTO? getUserByName(string userName)
+        public async Task<UserDTO?> GetUserByName(string userName)
         {
             if (string.IsNullOrEmpty(userName))
             {
                 return null;
             }
-            var userData = _context.Users.FirstOrDefault(u => u.Name == userName);
+            var userData = await _context.Users.FirstOrDefaultAsync(u => u.Name == userName);
             if (userData == null)
             {
                 return null;
@@ -61,9 +62,15 @@ namespace QuizApp.Services
             return _mapper.Map<UserDTO>(userData);
         }
 
-        public List<UserDTO> getAllUsers()
+        public async Task<List<UserDTO>> getAllUsers()
         {
-            return _mapper.Map<List<UserDTO>>( _context.Users);
+            var userList = await _context.Users.ToListAsync();
+            if (userList.Count == 0)
+            {
+                return [];
+            }
+
+            return _mapper.Map<List<UserDTO>>(userList);
         }
     }
 }

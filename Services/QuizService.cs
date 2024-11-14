@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using QuizApp.AppDbContext;
 using QuizApp.DTOs;
 using QuizApp.Helper;
@@ -21,62 +22,57 @@ namespace QuizApp.Services
             _questionService = questionService;
         }
 
-        public List<SimpleQuizDTO>? GetAllQuizzes()
+        public async Task<List<SimpleQuizDTO>?> GetAllQuizzes()
         {
-            var allQuizzes = _context.Quizzes.ToList();
+            var allQuizzes = await _context.Quizzes.ToListAsync();
             return _mapper.Map<List<SimpleQuizDTO>>(allQuizzes);
         }
 
-        public T? GetQuizById<T>(int id) 
+        public async Task<T?> GetQuizById<T>(int id) 
         {
-            var quiz = _context.Quizzes.FirstOrDefault(q => q.Id == id);
+            var quiz = await _context.Quizzes.FirstOrDefaultAsync(q => q.Id == id);
             if (quiz == null)
             {
                 return default;
             }
-            var quizQuestions = _context.Questions.Where(q => q.Quizzes.Any(qu => qu.Id == id)).ToList();
+            var quizQuestions = await _context.Questions.Where(q => q.Quizzes.Any(qu => qu.Id == id)).ToListAsync();
 
-            quizQuestions.ForEach(q =>
+            foreach (var q in quizQuestions)
             {
-                //this should already add all answers to the question, no need to add again
-                var answers = _context.Answers.Where(a => a.QuestionsId == q.Id).ToList();
-            });
+                var answers = await _context.Answers.Where(a => a.QuestionsId == q.Id).ToListAsync();
+            }
 
             quiz.Questions = quizQuestions;
-
-
-            var quizDTO = _mapper.Map<T>(quiz);
-
-            return quizDTO;
+            return _mapper.Map<T>(quiz);
         }
 
-        public QuizAnswersDTO? GetAnswersForQuizById(int id)
+        public async Task<QuizAnswersDTO?> GetAnswersForQuizById(int id)
         {
-            var quiz = _context.Quizzes.FirstOrDefault(q => q.Id == id);
+            var quiz = await _context.Quizzes.FirstOrDefaultAsync(q => q.Id == id);
             if (quiz == null)
             {
                 return default;
             }
-            var quizQuestions = _context.Questions.Where(q => q.Quizzes.Any(qu => qu.Id == id)).ToList();
+            var quizQuestions = await _context.Questions.Where(q => q.Quizzes.Any(qu => qu.Id == id)).ToListAsync();
 
             var listQuestionAnswers = new List<QuestionAnswersDTO>();
-            quizQuestions.ForEach(q =>
+            foreach (var q in quizQuestions)
             {
-                var correctAnswer = _context.Answers.FirstOrDefault(a => a.IsCorrect == true && a.QuestionsId == q.Id);
+                var correctAnswer = await _context.Answers.FirstOrDefaultAsync(a => a.IsCorrect == true && a.QuestionsId == q.Id);
                 var questionAnswers = new QuestionAnswersDTO
                 {
                     Id = q.Id,
                     CorrectAnswerId = correctAnswer.Id
                 };
                 listQuestionAnswers.Add(questionAnswers);
-            });
+            };
 
             var quizAnswersDTO = _mapper.Map<QuizAnswersDTO>(quiz);
             quizAnswersDTO.Questions.AddRange(listQuestionAnswers);
             return quizAnswersDTO;
         }
 
-        public QuizDTO? CreateQuiz(QuizDTO quizDTO)
+        public async Task<QuizDTO?> CreateQuiz(QuizDTO quizDTO)
         {
             if (quizDTO == null)
             {
@@ -85,25 +81,25 @@ namespace QuizApp.Services
 
             foreach (var question in quizDTO.Questions)
             {
-                _questionService.CreateQuestion(question);
+                await _questionService.CreateQuestion(question);
             }
 
             var quiz = _mapper.Map<Quizzes>(quizDTO);
 
-            var newQuiz = _context.Quizzes.Add(quiz);
-            _context.SaveChanges();
+            var newQuiz = await _context.Quizzes.AddAsync(quiz);
+            await _context.SaveChangesAsync();
 
-            return GetQuizById<QuizDTO>(newQuiz.Entity.Id);
+            return await GetQuizById<QuizDTO>(newQuiz.Entity.Id);
         }
 
-        public QuizDTO? UpdateQuiz(int id, QuizDTO quizDTO)
+        public async Task<QuizDTO?> UpdateQuiz(int id, QuizDTO quizDTO)
         {
             if (quizDTO == null)
             {
                 return null;
             }
 
-            var quiz = _context.Quizzes.FirstOrDefault(q =>  q.Id == id);
+            var quiz = await _context.Quizzes.FirstOrDefaultAsync(q =>  q.Id == id);
             if (quiz == null)
             {
                 return null;
@@ -111,32 +107,32 @@ namespace QuizApp.Services
 
             foreach (var question in quizDTO.Questions)
             {
-                _questionService.UpdateQuestion(question.Id, question);
+                await _questionService.UpdateQuestion(question.Id, question);
             }
 
             quiz.CreatedDate = DateTime.UtcNow;
             quiz.Name = quizDTO.Name;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return GetQuizById<QuizDTO>(quiz.Id);
+            return await GetQuizById<QuizDTO>(quiz.Id);
         }
 
-        public bool DeleteQuiz(int id)
+        public async Task<bool> DeleteQuiz(int id)
         {
-            var quiz = _context.Quizzes.FirstOrDefault(q => q.Id == id);
+            var quiz = await _context.Quizzes.FirstOrDefaultAsync(q => q.Id == id);
             if (quiz == null)
             {
                 return false;
             }
 
-            var questionsQuiz = _context.Questions.Where(q => q.Quizzes.Any(qu => qu.Id == id)).ToList();
+            var questionsQuiz = await _context.Questions.Where(q => q.Quizzes.Any(qu => qu.Id == id)).ToListAsync();
             foreach (var question in questionsQuiz)
             {
-                _questionService.DeleteQuestionById(question.Id);
+                await _questionService.DeleteQuestionById(question.Id);
             }
 
             _context.Quizzes.Remove(quiz);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
     }

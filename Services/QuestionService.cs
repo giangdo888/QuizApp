@@ -18,28 +18,30 @@ namespace QuizApp.Services
             _mapper = mapper;
         }
 
-        public List<SimpleQuestionDTO>? GetAllQuestions()
+        public async Task<List<SimpleQuestionDTO>> GetAllQuestions()
         {
-            var questions = _context.Questions.ToList();
+            var questions = await _context.Questions.ToListAsync();
+            if (questions.Count == 0)
+            {
+                return [];
+            }
             return _mapper.Map<List<SimpleQuestionDTO>>(questions);
         }
 
-        public QuestionDTO? GetQuestionById(int id)
+        public async Task<QuestionDTO?> GetQuestionById(int id)
         {
-            var question = _context.Questions.FirstOrDefault(q => q.Id == id);
+            var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == id);
             if (question == null) {
                 return null;
             }
 
-            var answers = _context.Answers.Where(a => a.QuestionsId == id).ToList();
+            var answers = await _context.Answers.Where(a => a.QuestionsId == id).ToListAsync();
             question.Answers = answers;
 
-            var QuestionDTO = _mapper.Map<QuestionDTO>(question);
-
-            return QuestionDTO;
+            return _mapper.Map<QuestionDTO>(question);
         }
 
-        public QuestionDTO? CreateQuestion(QuestionDTO questionDTO)
+        public async Task<QuestionDTO?> CreateQuestion(QuestionDTO questionDTO)
         {
             if (questionDTO == null)
             {
@@ -54,15 +56,16 @@ namespace QuizApp.Services
             var newQuestion = _context.Questions.Add(question);
             _context.SaveChanges();
 
-            return GetQuestionById(newQuestion.Entity.Id);
+            return await GetQuestionById(newQuestion.Entity.Id);
         }
 
-        public QuestionDTO? UpdateQuestion(int id, QuestionDTO questionDTO)
+        public async Task<QuestionDTO?> UpdateQuestion(int id, QuestionDTO questionDTO)
         {
             if (questionDTO == null)
             {
                 return null;
             }
+
             questionDTO.Id = id;
             var question = _mapper.Map<Questions>(questionDTO);
             foreach (var answer in question.Answers)
@@ -70,40 +73,40 @@ namespace QuizApp.Services
                 answer.QuestionsId = question.Id;
             }
 
-            var contextQuestion  = _context.Questions.FirstOrDefault(q => q.Id == question.Id);
+            var contextQuestion  = await _context.Questions.FirstOrDefaultAsync(q => q.Id == question.Id);
             if (contextQuestion == null)
             {
                 return null;
             }
             contextQuestion.Text = question.Text;
 
-            var contextAnswers = _context.Answers.Where(a => a.QuestionsId == question.Id).ToList();
+            var contextAnswers = await _context.Answers.Where(a => a.QuestionsId == question.Id).ToListAsync();
             _context.Answers.RemoveRange(contextAnswers);
             foreach(var answer in question.Answers)
             {
-                _context.Answers.Add(answer);
+                await _context.Answers.AddAsync(answer);
             }
 
-            _context.SaveChanges();
-            return GetQuestionById(contextQuestion.Id);
+            await _context.SaveChangesAsync();
+            return await GetQuestionById(contextQuestion.Id);
         }
 
-        public bool DeleteQuestionById(int id)
+        public async Task<bool> DeleteQuestionById(int id)
         {
-            var question = _context.Questions.FirstOrDefault(q => q.Id == id);
+            var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == id);
             if (question == null)
             {
                 return false;
             }
 
-            var answers = _context.Answers.Where(a => a.QuestionsId == id).ToList();
+            var answers = await _context.Answers.Where(a => a.QuestionsId == id).ToListAsync();
             foreach(var answer in answers)
             {
                 _context.Answers.Remove(answer);
             }
 
             _context.Questions.Remove(question);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
     }

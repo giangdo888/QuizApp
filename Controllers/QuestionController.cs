@@ -19,52 +19,47 @@ namespace QuizApp.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200)]
-        public IActionResult GetAllQuestionsController()
+        public async Task<ActionResult<List<SimpleQuestionDTO>>> GetAllQuestionsController()
         {
-            var questions = _questionService.GetAllQuestions();
+            var questions = await _questionService.GetAllQuestions();
+            if (questions.Count == 0)
+            {
+                return NotFound("Question list is empty");
+            }
             return Ok(questions);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        public IActionResult GetQuestionController(int id)
+        public async Task<ActionResult<QuestionDTO>> GetQuestionController(int id)
         {
-            var result = _questionService.GetQuestionById(id);
+            var result = await _questionService.GetQuestionById(id);
             if (result == null)
             {
-                return NotFound();
+                return NotFound("Not found question id: " + id);
             }
 
             return Ok(result);
         }
 
         [HttpPost]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        public IActionResult CreateQuestionController(QuestionDTO question)
+        public async Task<ActionResult<QuestionDTO>> CreateQuestionController(QuestionDTO question)
         {
-            var result = _questionService.CreateQuestion(question);
+            var result = await _questionService.CreateQuestion(question);
             if (result == null)
             {
-                return NotFound();
+                return BadRequest("Failed to create question");
             }
             
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        public IActionResult UpdateQuestionController(int id, QuestionDTO question)
+        public async Task<ActionResult> UpdateQuestionController(int id, QuestionDTO question)
         {
-            
-
-            var result = _questionService.UpdateQuestion(id, question);
+            var result = await _questionService.UpdateQuestion(id, question);
             if (result == null)
             {
-                return NotFound();
+                return BadRequest("Failed to update question");
             }
 
 
@@ -72,17 +67,15 @@ namespace QuizApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        public IActionResult DeleteQuestionController(int id)
+        public async Task<ActionResult<bool>> DeleteQuestionController(int id)
         {
-            var result = _questionService.DeleteQuestionById(id);
+            var result = await _questionService.DeleteQuestionById(id);
             if (!result)
             {
                 return NotFound();
             }
 
-            return Ok("Delete successfully");
+            return Ok("Deleted successfully");
         }
     }
 }

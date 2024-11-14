@@ -26,17 +26,14 @@ namespace QuizApp.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200)]
-        public IActionResult GetAllQuizzesController()
+        public async Task<ActionResult<List<SimpleQuizDTO>>> GetAllQuizzesController()
         {
-            var allQuizzes = _quizService.GetAllQuizzes();
+            var allQuizzes = await _quizService.GetAllQuizzes();
             return Ok(allQuizzes);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        public IActionResult GetQuizController(int id, [FromQuery] string? type = null)
+        public async Task<ActionResult> GetQuizController(int id, [FromQuery] string? type = null)
         {
             var getQuizzesType = string.IsNullOrEmpty(type)
                                 ? ToBeReturnedQuizzesType.All
@@ -48,13 +45,13 @@ namespace QuizApp.Controllers
             switch(getQuizzesType)
             {
                 case ToBeReturnedQuizzesType.All:
-                    quiz = _quizService.GetQuizById<QuizDTO>(id);
+                    quiz = await _quizService.GetQuizById<QuizDTO>(id);
                     break;
                 case ToBeReturnedQuizzesType.NoAnswers:
-                    quiz = _quizService.GetQuizById<QuizToPlayDTO>(id);
+                    quiz = await _quizService.GetQuizById<QuizToPlayDTO>(id);
                     break;
                 case ToBeReturnedQuizzesType.WithAnswers:
-                    quiz = _quizService.GetAnswersForQuizById(id);
+                    quiz = await _quizService.GetAnswersForQuizById(id);
                     break;
                 default:
                     return BadRequest("Invalid quiz type specified");
@@ -69,44 +66,38 @@ namespace QuizApp.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        public IActionResult CreateQuizController(QuizDTO quiz)
+        public async Task<ActionResult<QuizDTO>> CreateQuizController(QuizDTO quiz)
         {
-            var result = _quizService.CreateQuiz(quiz);
+            var result = await _quizService.CreateQuiz(quiz);
             if (result == null)
             {
-                return NotFound();
+                return BadRequest("Failed to create quiz");
             }
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        public IActionResult UpdateQuizController(int id, QuizDTO quizDTO)
+        public async Task<ActionResult<QuizDTO>> UpdateQuizController(int id, QuizDTO quizDTO)
         {
-            var result = _quizService?.UpdateQuiz(id, quizDTO);
+            var result = await _quizService.UpdateQuiz(id, quizDTO);
             if (result == null)
             {
-                return NotFound();
+                return BadRequest("Failed to update quiz");
             }
 
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        public IActionResult DeleteQuizController(int id)
+        public async Task<ActionResult<bool>> DeleteQuizController(int id)
         {
-            var result = _quizService.DeleteQuiz(id);
+            var result = await _quizService.DeleteQuiz(id);
             if(!result)
             {
                 return NotFound();
             }
 
-            return Ok("Delete successfully");
+            return Ok("Deleted successfully");
         }
     }
 }
