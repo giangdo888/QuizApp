@@ -488,13 +488,13 @@ namespace QuizApp.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 11, 14, 5, 11, 22, 638, DateTimeKind.Utc).AddTicks(5701),
+                            CreatedDate = new DateTime(2024, 11, 14, 7, 17, 38, 709, DateTimeKind.Utc).AddTicks(5561),
                             Name = "Quiz set 1"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 11, 14, 5, 11, 22, 638, DateTimeKind.Utc).AddTicks(5706),
+                            CreatedDate = new DateTime(2024, 11, 14, 7, 17, 38, 709, DateTimeKind.Utc).AddTicks(5564),
                             Name = "Quiz set 2"
                         });
                 });
@@ -547,6 +547,9 @@ namespace QuizApp.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.DTOs;
 using QuizApp.Interfaces;       
@@ -15,7 +16,7 @@ namespace QuizApp.Controllers
             _userService = userService;
         }
 
-        [HttpPost]
+        [HttpPost("register")]
 
         public IActionResult SignUp(UserDTO userDTO)
         {
@@ -26,6 +27,25 @@ namespace QuizApp.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpPost("login")]
+        public IActionResult SignIn(SignInUserDTO signInData)
+        {
+            var token = _userService.SignIn(signInData);
+            if (token == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(token);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult GetAllUsersController()
+        {
+            return Ok(_userService.getAllUsers());
         }
     }
 }

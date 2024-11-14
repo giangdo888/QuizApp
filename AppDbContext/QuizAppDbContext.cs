@@ -97,6 +97,8 @@ namespace QuizApp.AppDbContext
                 new { QuestionsId = 9, QuizzesId = 2 },
                 new { QuestionsId = 10, QuizzesId = 2 }
                 ));
+
+            modelBuilder.Entity<Users>().HasIndex(u => u.Name).IsUnique();
         }
     }
 }
