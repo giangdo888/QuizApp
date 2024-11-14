@@ -76,12 +76,19 @@ namespace QuizApp.Services
             return quizAnswersDTO;
         }
 
-        public QuizDTO? CreateQuiz(Quizzes quiz)
+        public QuizDTO? CreateQuiz(QuizDTO quizDTO)
         {
-            foreach (var question in quiz.Questions)
+            if (quizDTO == null)
+            {
+                return null;
+            }
+
+            foreach (var question in quizDTO.Questions)
             {
                 _questionService.CreateQuestion(question);
             }
+
+            var quiz = _mapper.Map<Quizzes>(quizDTO);
 
             var newQuiz = _context.Quizzes.Add(quiz);
             _context.SaveChanges();
@@ -89,26 +96,29 @@ namespace QuizApp.Services
             return GetQuizById<QuizDTO>(newQuiz.Entity.Id);
         }
 
-        public QuizDTO? UpdateQuiz(Quizzes quiz)
+        public QuizDTO? UpdateQuiz(int id, QuizDTO quizDTO)
         {
-            var contextQuiz = _context.Quizzes.FirstOrDefault(q =>  q.Id == quiz.Id);
-            if (contextQuiz == null)
+            if (quizDTO == null)
             {
                 return null;
             }
 
-            //var contextQuestions = _context.Questions.Where(q => q.Quizzes.Any(qu => qu.Id == quiz.Id)).ToList();
-            //_context.Questions.RemoveRange(contextQuestions);
-            foreach (var question in quiz.Questions)
+            var quiz = _context.Quizzes.FirstOrDefault(q =>  q.Id == id);
+            if (quiz == null)
             {
-                _questionService.UpdateQuestion(question);
+                return null;
             }
 
-            contextQuiz.CreatedDate = DateTime.UtcNow;
-            contextQuiz.Name = quiz.Name;
+            foreach (var question in quizDTO.Questions)
+            {
+                _questionService.UpdateQuestion(question.Id, question);
+            }
+
+            quiz.CreatedDate = DateTime.UtcNow;
+            quiz.Name = quizDTO.Name;
             _context.SaveChanges();
 
-            return GetQuizById<QuizDTO>(contextQuiz.Id);
+            return GetQuizById<QuizDTO>(quiz.Id);
         }
 
         public bool DeleteQuiz(int id)

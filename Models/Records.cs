@@ -8,5 +8,6 @@
 
         //foreign key
         public int QuizzesId { get; set; }
+        public int UsersId { get; set; }
     }
 }

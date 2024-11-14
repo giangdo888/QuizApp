@@ -35,6 +35,10 @@ namespace QuizApp.Helper
             CreateMap<Quizzes, SimpleQuizDTO>();
             CreateMap<SimpleQuestionDTO, Questions>();
             CreateMap<Questions, SimpleQuestionDTO>();
+
+            //group for user
+            CreateMap<Users, UserDTO>();
+            CreateMap<UserDTO, Users>();
         }
     }
 }

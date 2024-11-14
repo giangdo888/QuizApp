@@ -22,6 +22,7 @@ namespace QuizApp
 
             builder.Services.AddTransient<IQuestion, QuestionService>();
             builder.Services.AddTransient<IQuiz, QuizService>();
+            builder.Services.AddTransient<IUser, UserService>();
 
             var app = builder.Build();
 

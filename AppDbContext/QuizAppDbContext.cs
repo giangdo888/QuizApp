@@ -11,6 +11,7 @@ namespace QuizApp.AppDbContext
         public DbSet<Answers> Answers { get; set; }
         public DbSet<Quizzes> Quizzes { get; set; }
         public DbSet<Records> Records { get; set; }
+        public DbSet<Users> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

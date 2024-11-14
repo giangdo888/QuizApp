@@ -19,14 +19,10 @@ namespace QuizApp.Controllers
     public class QuizController : ControllerBase
     {
         private readonly IQuiz _quizService;
-        private readonly IMapper _mapper;
-        private readonly IQuestion _questionService;
 
-        public QuizController(IQuiz quizService, IMapper mapper, IQuestion questionService)
+        public QuizController(IQuiz quizService)
         {
             _quizService = quizService;
-            _mapper = mapper;
-            _questionService = questionService;
         }
 
         [HttpGet]
@@ -48,7 +44,7 @@ namespace QuizApp.Controllers
                                 ? parsedType
                                 : ToBeReturnedQuizzesType.Unknown;
 
-            object quiz;
+            object? quiz;
             switch(getQuizzesType)
             {
                 case ToBeReturnedQuizzesType.All:
@@ -75,17 +71,14 @@ namespace QuizApp.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public IActionResult CreateQuizController(QuizDTO quizDTO)
+        public IActionResult CreateQuizController(QuizDTO quiz)
         {
-            if (quizDTO == null)
+            var result = _quizService.CreateQuiz(quiz);
+            if (result == null)
             {
                 return NotFound();
             }
-
-            //var questions = _mapper.Map<List<Questions>>(quizDTO.Questions);
-            var quiz = _mapper.Map<Quizzes>(quizDTO);
-
-            return Ok(_quizService.CreateQuiz(quiz));
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -93,22 +86,13 @@ namespace QuizApp.Controllers
         [ProducesResponseType(400)]
         public IActionResult UpdateQuizController(int id, QuizDTO quizDTO)
         {
-            if (quizDTO == null)
+            var result = _quizService?.UpdateQuiz(id, quizDTO);
+            if (result == null)
             {
                 return NotFound();
             }
 
-            quizDTO.Id = id;
-            var quiz = _mapper.Map<Quizzes>(quizDTO);
-            foreach(var question in quiz.Questions)
-            {
-                foreach(var answer in question.Answers)
-                {
-                    answer.QuestionsId = question.Id;
-                }
-            }
-
-            return Ok(_quizService?.UpdateQuiz(quiz));
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]

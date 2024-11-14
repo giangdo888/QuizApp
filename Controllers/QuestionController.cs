@@ -13,11 +13,9 @@ namespace QuizApp.Controllers
     public class QuestionController : ControllerBase
     {
         public readonly IQuestion _questionService;
-        public readonly IMapper _mapper;
-        public QuestionController(IQuestion questionService, IMapper mapper)
+        public QuestionController(IQuestion questionService)
         {
             _questionService = questionService;
-            _mapper = mapper;
         }
 
         [HttpGet]
@@ -33,52 +31,44 @@ namespace QuizApp.Controllers
         [ProducesResponseType(400)]
         public IActionResult GetQuestionController(int id)
         {
-            var question = _questionService.GetQuestionById(id);
-            if (question == null)
+            var result = _questionService.GetQuestionById(id);
+            if (result == null)
             {
                 return NotFound();
             }
 
-            return Ok(question);
+            return Ok(result);
         }
 
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public IActionResult CreateQuestionController(QuestionDTO questionDTO)
+        public IActionResult CreateQuestionController(QuestionDTO question)
         {
-            if (questionDTO == null)
+            var result = _questionService.CreateQuestion(question);
+            if (result == null)
             {
                 return NotFound();
             }
-            var question = _mapper.Map<Questions>(questionDTO);
-            return Ok(_questionService.CreateQuestion(question));
+            
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public IActionResult UpdateQuestionController(int id, QuestionDTO questionDTO)
+        public IActionResult UpdateQuestionController(int id, QuestionDTO question)
         {
-            if (questionDTO == null)
-            {
-                return NotFound();
-            }
-            questionDTO.Id = id;
-            var question = _mapper.Map<Questions>(questionDTO);
-            foreach(var answer in question.Answers)
-            {
-                answer.QuestionsId = question.Id;
-            }
+            
 
-            var resultQuestion = _questionService.UpdateQuestion(question);
-            if (resultQuestion == null)
+            var result = _questionService.UpdateQuestion(id, question);
+            if (result == null)
             {
                 return NotFound();
             }
 
 
-            return Ok(resultQuestion);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
