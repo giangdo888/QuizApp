@@ -39,6 +39,15 @@ QuizApp is a full-stack application that allows users to manage quiz questions a
 - [**.NET SDK**](https://dotnet.microsoft.com/download)
 - [**PostgreSQL**](https://www.postgresql.org/download/)
 
+---
+
+## How to run
+- Open and run the project with Visual Studio
+- To access Swagger UI: https://localhost:{port}/swagger/index.html
+- To access QuizApp UI: https://localhost:{port}/index.html
+
+---
+
 ## To-do
 - Authentication on FE, restrict access based on authorization.
 - Save records to database.
