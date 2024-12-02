@@ -42,9 +42,12 @@ QuizApp is a full-stack application that allows users to manage quiz questions a
 ---
 
 ## How to run
-- Open and run the project with Visual Studio
-- To access Swagger UI: https://localhost:{port}/swagger/index.html
-- To access QuizApp UI: https://localhost:{port}/index.html
+- Create .env file and add these required environment variables:
+  - POSTGRES_USER=<your_postgres_user>
+  - POSTGRES_PASSWORD=<your_postgres_password>
+  - POSTGRES_DB=<your_postgres_db_name>
+- Start and build docker image by command: docker compose up --build -d
+- To access QuizApp UI: http://localhost:8000/
 
 ---
 
