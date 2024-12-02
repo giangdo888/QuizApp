@@ -1,0 +1,29 @@
+services:
+  quizapp:
+    image: quizapp
+    build:
+      context: .
+      dockerfile: QuizApp/Dockerfile
+      target: final
+    ports:
+        - 8000:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ["./wait-for-it.sh", "db:5432", "--", "dotnet", "QuizApp.dll"]
+  db:
+    image: postgres
+    restart: always
+    environment:
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+        - "5435:5432"
+    volumes:
+        - db-data:/var/lib/postgresql/data
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres || exit 1"]
+volumes:
+  db-data:
+
