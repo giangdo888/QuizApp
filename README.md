@@ -11,6 +11,7 @@ QuizApp is a full-stack application that allows users to manage quiz questions a
 - **Question Management**: Users can create, modify, and delete questions through an intuitive UI.
 - **Correct Answer Display**: Correct answers are shown after each submission.
 - **Score Calculation**: The final score of the quiz is displayed after all submissions.
+
 ### Backend Features
 - **Authentication**: Authorized with Jwt and only allow such users to fetch user list.
 - **Quiz-related APIs**: CRUD APIs are available for quizzes.
@@ -28,9 +29,13 @@ QuizApp is a full-stack application that allows users to manage quiz questions a
 
 ### Backend
 - **.NET Core**
+- **Entity Framework Core**
 
 ### Database
 - **PostgreSQL**
+
+### Containerization
+- The entire project is containerized using **Docker** for easy deployment and consistent environment setup across all platforms.
 
 ---
 
