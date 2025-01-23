@@ -1,48 +1,51 @@
 # QuizApp 🎯
 
-QuizApp is a full-stack application that allows users to manage quiz questions and participate in quizzes. Users can create, modify, and delete questions while enjoying an interactive quiz experience.
+QuizApp is a full-stack application that allows users to create, manage, and participate in quizzes. With an intuitive user interface and robust backend, users can answer quiz questions, track their progress, and manage quiz content. It provides features for both quiz participants and administrators.
 
 ---
 
 ## 🚀 Features
 
 ### Frontend Features
-- **Quiz Participation**: Users can play quizzes and answer a series of questions.
-- **Question Management**: Users can create, modify, and delete questions through an intuitive UI.
-- **Correct Answer Display**: Correct answers are shown after each submission.
-- **Score Calculation**: The final score of the quiz is displayed after all submissions.
+- **Quiz Participation**: Users can play quizzes and answer a series of questions, receiving instant feedback on their answers.
+- **Question Management**: Admin users can easily create, modify, and delete quiz questions through an intuitive interface.
+- **Real-time Feedback**: Correct answers are shown immediately after each submission, enhancing the learning experience.
+- **Score Calculation**: After completing the quiz, users can view their final score along with the correct answers.
 
 ### Backend Features
-- **Authentication**: Authorized with Jwt and only allow such users to fetch user list.
-- **Quiz-related APIs**: CRUD APIs are available for quizzes.
-- **Question-related APIs**: CRUD APIs are available for questions.
-- **User-related APIs**: CRUD APIs are available for users.
+- **Authentication & Authorization**: Secure user authentication using JWT. Only authorized users can perform certain actions such as viewing user lists or modifying quiz data.
+- **Quiz CRUD Operations**: APIs are provided for creating, reading, updating, and deleting quizzes, enabling dynamic quiz management.
+- **Question CRUD Operations**: Full functionality to create, read, update, and delete quiz questions.
+- **User Management**: APIs for managing user data, including creating, updating, and deleting user accounts.
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **HTML**
-- **CSS**
-- **JavaScript**
+- **HTML**: Used for creating the structure and content of the web pages.
+- **CSS**: Custom styles to ensure a visually appealing and responsive UI.
+- **JavaScript**: Adds dynamic functionality to the frontend for user interaction.
 
 ### Backend
-- **.NET Core**
-- **Entity Framework Core**
+- **.NET Core**: A powerful framework for building the backend APIs and handling the logic for managing quizzes and questions.
+- **Entity Framework Core**: An ORM used to interact with the PostgreSQL database in a seamless manner.
 
 ### Database
-- **PostgreSQL**
+- **PostgreSQL**: A reliable, open-source relational database used to store quiz, question, and user data.
 
 ### Containerization
-- The entire project is containerized using **Docker** for easy deployment and consistent environment setup across all platforms.
+- The entire project is containerized using **Docker**, making it easy to set up and deploy across different environments.
 
 ---
 
 ## 📋 Prerequisites
 
-- [**.NET SDK**](https://dotnet.microsoft.com/download)
-- [**PostgreSQL**](https://www.postgresql.org/download/)
+Before running the application, make sure you have the following installed:
+
+- [**.NET SDK**](https://dotnet.microsoft.com/download) for building and running the backend.
+- [**PostgreSQL**](https://www.postgresql.org/download/) for the database.
+- [**Docker**](https://www.docker.com/get-started) for containerizing the application.
 
 ---
 
