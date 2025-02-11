@@ -65,7 +65,6 @@ Before running the application, make sure you have the following installed:
 - More error handling.
 - Timer for participating quiz.
 - Logger.
-- Docker.
 - Unit test.
 - Random questions for quizzes, random answer's positions.
 - FE for delete questions, quizzes.
